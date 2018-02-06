@@ -44,7 +44,10 @@ type Image struct {
 }
 
 func (this *MainController) Get() {
-
+	btime := base.GetCurrentDataUnix()
+	defer func() {
+		beego.Debug(base.GetCurrentDataUnix() - btime)
+	}()
 	SecretID := "AKIDznNjqhqjsmRt634ESRBk47uQilX2lNAg"
 	secretKey := "RfdKmzyiDSSEl36yc1C8qIUQ9euud7SZ"
 	appID := "10117716"
@@ -70,7 +73,7 @@ func (this *MainController) Get() {
 	//
 
 	h := hmac.New(sha1.New, []byte(secretKey))
-	beego.Debug(sign)
+
 	h.Write([]byte(sign))
 	hm := h.Sum(nil)
 	//attach orig_sign to hm
@@ -89,7 +92,7 @@ func (this *MainController) Get() {
 	rt.Opdata = append(rt.Opdata, od)
 
 	byt, err := json.Marshal(rt)
-	beego.Debug(string(byt))
+
 	br := bytes.NewReader(byt)
 
 	////
